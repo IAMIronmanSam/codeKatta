@@ -1,0 +1,14 @@
+{
+  "name": "store-pricing",
+  "version": "1.0.0",
+  "description": "Price goods",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Arivazhagan",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^3.4.2"
+  }
+}
