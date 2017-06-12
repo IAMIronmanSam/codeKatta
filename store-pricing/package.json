@@ -2,7 +2,7 @@
   "name": "store-pricing",
   "version": "1.0.0",
   "description": "Price goods",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "mocha"
   },
