@@ -1,5 +1,5 @@
 var superMarket = exports;
-var _ = require('underscore');
+//var _ = require('underscore');
 var grocery = [];
 var offer = [];
 superMarket.setup = function() {
@@ -8,66 +8,105 @@ superMarket.setup = function() {
  return true; 
 }
 
-superMarket.addStock = function(stock) {
-	if(!!stock){
-	grocery[stock.type] = {
-		"name" : stock.name,
-		"price" : stock.price,
-		"quantity" : stock.quantity
-	}
-	return grocery[stock.type];
-	}else{
-		return grocery;
-	}
-}
-superMarket.deleteStock = function(stock) {
-	if(!!stock){
-		for(var v in grocery){
-			if(grocery[v].name === stock.name){
-				delete grocery[stock.type]; 
-			}else{
-				return grocery;
-			}
-		}
-	}
-	return grocery;
-}
-superMarket.addOffer = function(stockOffer) {
-	if(!!stockOffer){
-		if(offer[stockOffer.type]){
-			offer[stockOffer.type].push({
-				"name" : stockOffer.name,
-				"Offer" : stockOffer.Offer,
-				"quantity" : stockOffer.minQuantity,
-				"validUpto" : stockOffer.validUpto
+superMarket.stock = { 
+	create : function(stock) {
+		if(!!stock){
+			grocery[stock.type] = [];
+			grocery[stock.type].push({
+				"name" : stock.name,
+				"price" : stock.price,
+				"quantity" : stock.quantity,
+				"type": stock.type
 			});
+			return grocery[stock.type];
+		}
+	},
+	add : function(stock) {
+		if(!!stock){
+			var groceryType = grocery[stock.type];
+				groceryType.push({
+					"name" : stock.name,
+					"price" : stock.price,
+					"quantity" : stock.quantity
+				});
+			return grocery;
 		}else{
-			offer[stockOffer.type] = {
-				"name" : stockOffer.name,
-				"Offer" : stockOffer.Offer,
-				"quantity" : stockOffer.minQuantity,
-				"validUpto" : stockOffer.validUpto
+			return grocery;
+		}	
+	},
+	edit : function(stock) {
+		if(!!stock){
+			var groceryType = grocery[stock.type];
+					for(var stockItem in groceryType){
+					if(groceryType[stockItem].name == stock.name){
+						groceryType[stockItem] = {
+							"name" : stock.name,
+							"price" : stock.price,
+							"quantity" : stock.quantity
+						};
+					}
+				}
+			return grocery;
+		}else{
+			return grocery;
+		}	
+	},
+	delete : function(stock) {
+		if(!!stock){
+			for(var v in grocery){
+				if(grocery[v].name === stock.name){
+					delete grocery[stock.type]; 
+				}
 			}
 		}
+	return grocery;
 	}
-	return offer;
 };
-superMarket.removeOffer = function(stockOffer) {
+superMarket.offer = {
+	add : function(stockOffer) {
 	if(!!stockOffer){
-		for(var v in offer){
-			if(offer[v].offerID === stockOffer.offerID){
-				delete offer[stockOffer.type]; 
+		offer.push(stockOffer.type);
+		offer[stockOffer.type] = [];
+		offer[stockOffer.type].push({
+			"offerID" : stockOffer.offerID,
+			"Offer" : stockOffer.Offer,
+			"quantity" : stockOffer.minQuantity,
+			"validUpto" : stockOffer.validUpto
+		});
+	}else{
+		console.log('No Offers')
+	}
+	return offer;
+},
+update : function(stockOffer) {
+	if(!!stockOffer){
+		offer[stockOffer.type].push({
+			"offerID" : stockOffer.offerID,
+			"Offer" : stockOffer.Offer,
+			"quantity" : stockOffer.minQuantity,
+			"validUpto" : stockOffer.validUpto
+		});
+	}
+	return offer;
+},
+remove : function(stockOffer) {
+	if(!!stockOffer){
+		for(var type in offer){
+			for(var offerItem in offer[type]){
+				if(offerItem.offerID === stockOffer.offerID){
+					delete offer[stockOffer.type].offerItem; 
+				}
 			}
 		}
 	}
 	return offer;
-};
-superMarket.isOfferExpired = function(stockOffer) {
+},
+isExpired : function(stockOffer) {
 	if(!!stockOffer){
 		if(stockOffer.valid){
 			delete offer[stockOffer.type]; 
 		}
 	}
 	return offer;
+}
 };
-
